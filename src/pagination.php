@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * Coding copyright Martin Lucas-Smith, University of Cambridge, 2003-13
+ * Version 1.0.1
+ * Distributed under the terms of the GNU Public Licence - www.gnu.org/copyleft/gpl.html
+ * Download latest from: http://download.geog.cam.ac.uk/projects/pagination/
+ */
+
+
 # Pagination class
 class pagination
 {
@@ -46,7 +54,7 @@ class pagination
 	
 	
 	# Function to enable pagination - based on www.phpnoise.com/tutorials/9/1
-	public /* static */ function getPagerData ($items, $limitPerPage, $page)
+	public static function getPagerData ($items, $limitPerPage, $page)
 	{
 		# Take the number of items
 		$items = (int) $items;
@@ -73,7 +81,7 @@ class pagination
 	
 	
 	# Pagination links
-	public /* static */ function paginationLinks ($page, $totalPages, $baseLink, $queryString = '' /* i.e. the complete string, e.g. foo=bar&person=john */, $ulClass = 'paginationlinks', $pageInQueryString = false)
+	public static function paginationLinks ($page, $totalPages, $baseLink /* will have htmlspecialchars applied to it */, $queryString = '' /* i.e. the complete string, e.g. foo=bar&person=john */, $ulClass = 'paginationlinks', $pageInQueryString = false)
 	{
 		# Load required libraries
 		require_once ('application.php');
@@ -83,17 +91,21 @@ class pagination
 		if ($totalPages == 1) {return '';}
 		
 		# Determine a pattern for the link, and a special-case link for page 1 (which has no page number added)
-		$linkFormat = $baseLink . ($pageInQueryString ? '?page=%s' . ($queryString ? '&amp;' . htmlspecialchars ($queryString) : '') : 'page%s.html' . ($queryString ? '?' . htmlspecialchars ($queryString) : ''));
-		$linkFormatPage1 = $baseLink . ($queryString ? '?' . htmlspecialchars ($queryString) : '');
+		$linkFormat = $baseLink . ($pageInQueryString ? '?page=%s' . ($queryString ? '&' . $queryString : '') : 'page%s.html' . ($queryString ? '?' . $queryString : ''));
+		$linkFormatPage1 = $baseLink . ($queryString ? '?' . $queryString : '');
 		
 		# Create a jumplist
 		$current = ($page == 1 ? $linkFormatPage1 : preg_replace ('/%s/', $page, $linkFormat, 1));	// Use of preg_replace here is replacement for sprintf: safely ignores everything after the first %s, using the limit=1 technique as per http://stackoverflow.com/questions/4863863
 		$pages = array ();
 		for ($i = 1; $i <= $totalPages; $i++) {
 			$link = ($i == 1 ? $linkFormatPage1 : preg_replace ('/%s/', $i, $linkFormat, 1));
-			$pages[$link] = "Page {$i} <span class=\"faded\">of {$totalPages}</span>";
+			$pages[$link] = "Page {$i} of {$totalPages}";
 		}
 		$jumplist = pureContent::htmlJumplist ($pages, $current, $baseLink, $name = 'jumplist', $parentTabLevel = 0, $class = 'jumplist', $introductoryText = '');
+		
+		# Sanitise HTML
+		$linkFormat			= htmlspecialchars ($linkFormat);
+		$linkFormatPage1	= htmlspecialchars ($linkFormatPage1);
 		
 		# Create pagination HTML
 		$paginationLinks['introduction'] = 'Switch page: ';
