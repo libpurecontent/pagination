@@ -1,9 +1,9 @@
 <?php
 
 /*
- * Coding copyright Martin Lucas-Smith, University of Cambridge, 2003-13
- * Version 1.0.1
- * Distributed under the terms of the GNU Public Licence - www.gnu.org/copyleft/gpl.html
+ * Coding copyright Martin Lucas-Smith, University of Cambridge, 2003-15
+ * Version 1.0.2
+ * Distributed under the terms of the GNU Public Licence - http://www.gnu.org/copyleft/gpl.html
  * Download latest from: http://download.geog.cam.ac.uk/projects/pagination/
  */
 
@@ -93,6 +93,17 @@ class pagination
 		# Determine a pattern for the link, and a special-case link for page 1 (which has no page number added)
 		$linkFormat = $baseLink . ($pageInQueryString ? '?page=%s' . ($queryString ? '&' . $queryString : '') : 'page%s.html' . ($queryString ? '?' . $queryString : ''));
 		$linkFormatPage1 = $baseLink . ($queryString ? '?' . $queryString : '');
+		
+		# If the requested page is more than the number of total pages, redirect to the highest number, to avoid duplicate page
+		if (isSet ($_GET['page']) && ctype_digit ($_GET['page'])) {
+			$requestedPage = $_GET['page'];
+			if ($requestedPage > $totalPages) {
+				$location = preg_replace ('/%s/', $page, $linkFormat, 1);
+				application::sendHeader (301, $_SERVER['_SITE_URL'] . $location);
+				$html = "\n<p><a href=\"{$location}\">Continue to the next page.</a></p>";
+				return $html;
+			}
+		}
 		
 		# Create a jumplist
 		$current = ($page == 1 ? $linkFormatPage1 : preg_replace ('/%s/', $page, $linkFormat, 1));	// Use of preg_replace here is replacement for sprintf: safely ignores everything after the first %s, using the limit=1 technique as per http://stackoverflow.com/questions/4863863
