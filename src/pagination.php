@@ -1,10 +1,10 @@
 <?php
 
 /*
- * Coding copyright Martin Lucas-Smith, University of Cambridge, 2003-15
- * Version 1.0.2
- * Distributed under the terms of the GNU Public Licence - http://www.gnu.org/copyleft/gpl.html
- * Download latest from: http://download.geog.cam.ac.uk/projects/pagination/
+ * Coding copyright Martin Lucas-Smith, University of Cambridge, 2003-20
+ * Version 1.0.3
+ * Distributed under the terms of the GNU Public Licence - https://www.gnu.org/licenses/gpl-3.0.html
+ * Download latest from: https://download.geog.cam.ac.uk/projects/pagination/
  */
 
 
@@ -112,7 +112,7 @@ class pagination
 			$link = ($i == 1 ? $linkFormatPage1 : preg_replace ('/%s/', $i, $linkFormat, 1));
 			$pages[$link] = "Page {$i} of {$totalPages}";
 		}
-		$jumplist = pureContent::htmlJumplist ($pages, $current, $baseLink, $name = 'jumplist', $parentTabLevel = 0, $class = 'jumplist', $introductoryText = '');
+		$jumplist = application::htmlJumplist ($pages, $current, $baseLink, $name = 'jumplist', $parentTabLevel = 0, $class = 'jumplist', $introductoryText = '');
 		
 		# Sanitise HTML
 		$linkFormat			= htmlspecialchars ($linkFormat);
