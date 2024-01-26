@@ -1,13 +1,5 @@
 <?php
 
-/*
- * Coding copyright Martin Lucas-Smith, University of Cambridge, 2003-20
- * Version 1.0.3
- * Distributed under the terms of the GNU Public Licence - https://www.gnu.org/licenses/gpl-3.0.html
- * Download latest from: https://download.geog.cam.ac.uk/projects/pagination/
- */
-
-
 # Pagination class
 class pagination
 {
@@ -26,10 +18,6 @@ class pagination
 	# Constructor
 	public function __construct ($settings, $baseUrl)
 	{
-		# Load required libraries
-		require_once ('application.php');
-		require_once ('ultimateForm.php');
-		
 		# Merge in the arguments; note that $errors returns the errors by reference and not as a result from the method
 		if (!$this->settings = application::assignArguments ($errors, $settings, $this->defaults, __CLASS__, NULL, $handleErrors = true)) {return false;}
 		
@@ -83,10 +71,6 @@ class pagination
 	# Pagination links
 	public static function paginationLinks ($page, $totalPages, $baseLink /* will have htmlspecialchars applied to it */, $queryString = '' /* i.e. the complete string, e.g. foo=bar&person=john */, $ulClass = 'paginationlinks', $pageInQueryString = false)
 	{
-		# Load required libraries
-		require_once ('application.php');
-		require_once ('pureContent.php');
-		
 		# Avoid creating pagination if there is only one page
 		if ($totalPages == 1) {return '';}
 		
