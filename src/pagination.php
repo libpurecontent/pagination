@@ -3,6 +3,13 @@
 # Pagination class
 class pagination
 {
+	# Class properties
+	private $settings;
+	private $baseUrl;
+	private $html  = '';
+	
+	
+	
 	# Specify available arguments as defaults or as NULL (to represent a required argument)
 	private $defaults = array (
 		'paginationRecordsPerPageDefault'	=> 50,
@@ -11,8 +18,6 @@ class pagination
 		
 	);
 	
-	# Class properties
-	private $html  = '';
 	
 	
 	# Constructor
